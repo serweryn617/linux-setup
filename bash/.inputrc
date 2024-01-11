@@ -1,0 +1,8 @@
+$include /etc/inputrc
+
+# arrow up history
+"\e[A":history-search-backward
+"\e[B":history-search-forward
+
+# case insensitive completion
+set completion-ignore-case on
