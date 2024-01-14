@@ -1,0 +1,108 @@
+format = """
+[\
+$username:\
+$directory\
+( $git_branch)\
+( $git_status)\
+( $python)\
+$fill\
+($cmd_duration )\
+$memory_usage\
+($battery )\
+$time
+$character\
+](text)
+"""
+
+add_newline = false
+scan_timeout = 10
+palette = 'joyous_wilds'
+
+[palettes.joyous_wilds]
+green1 = '#00cc52'
+pink1 = '#d849ff'
+text = '#cccccc'
+git_orange = '#f54d27'
+gitlab_orange = '#c9561e'
+python_green = '#11a611'
+
+[username]
+show_always = true
+style_user = "pink1"
+style_root = "pink1"
+format = '[$user]($style)'
+
+[directory]
+style = "green1"
+format = '[$path]($style)'
+truncation_length = 10
+truncation_symbol = ".../"
+
+[c]
+symbol = "c"
+style = ""
+detect_extensions = ["c", "h", "cpp", "hpp"]
+version_format = "${raw}"
+format = '[$symbol ($version)]($style)'
+commands = [ [ "gcc", "--version" ] ]
+
+[cmake]
+format = '[$symbol($version)]($style)'
+version_format = "${major}.${minor}"
+symbol = "cmake"
+detect_files = ["CMakeLists.txt", "CMakeCache.txt"]
+style = ""
+
+[python]
+style = "python_green"
+symbol = "🐍"
+version_format = "${major}.${minor}"
+pyenv_version_name = false
+format = '[${symbol}${version}( \($virtualenv\))]($style)'
+detect_extensions = ["py", "pyc", "pyw"]
+
+[git_branch]
+symbol = ""
+style = "bold git_orange"
+format = '[$symbol$branch]($style)'
+
+[git_status]
+style = ""
+up_to_date = ""
+format = '[$all_status$ahead_behind]($style)'
+
+[time]
+disabled = false
+time_format = "%R" # Hour:Minute Format
+style = "fg:#777777"
+format = '[$time]($style)'
+
+[battery]
+charging_symbol = "[b](yellow)"
+discharging_symbol = 'bat '
+format = "[$symbol$percentage]($style)"
+
+[[battery.display]]
+threshold = 30
+style = "pink1"
+
+[fill]
+symbol = " "
+
+[cmd_duration]
+min_time = 500
+show_milliseconds = false
+style = ''
+format = '[$duration]($style)'
+
+[memory_usage]
+threshold = -1
+format = "[$symbol${ram_pct}]($style) "
+symbol = "🐏"
+style = "white"
+disabled = false
+
+[character]
+success_symbol = "[>](bold green1)"
+error_symbol = "[>](bold pink1)"
+format = "$symbol "
