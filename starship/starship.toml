@@ -1,14 +1,13 @@
 format = """
 [\
-$username:\
+$username@\
+$hostname:\
 $directory\
 ( $git_branch)\
-( $git_status)\
+$git_status\
 ( $python)\
 $fill\
 ($cmd_duration )\
-$memory_usage\
-($battery )\
 $time
 $character\
 ](text)
@@ -25,6 +24,8 @@ text = '#cccccc'
 git_orange = '#f54d27'
 gitlab_orange = '#c9561e'
 python_green = '#11a611'
+python_yellow = '#ffde52'
+python_blue = '#306998'
 
 [username]
 show_always = true
@@ -32,11 +33,14 @@ style_user = "pink1"
 style_root = "pink1"
 format = '[$user]($style)'
 
+[hostname]
+ssh_only = false
+format = '[$hostname](pink1)'
+
 [directory]
 style = "green1"
 format = '[$path]($style)'
-truncation_length = 10
-truncation_symbol = ".../"
+truncation_length = 5
 
 [c]
 symbol = "c"
@@ -55,10 +59,10 @@ style = ""
 
 [python]
 style = "python_green"
-symbol = "🐍"
+symbol = "py"
 version_format = "${major}.${minor}"
 pyenv_version_name = false
-format = '[${symbol}${version}( \($virtualenv\))]($style)'
+format = '[${symbol}](blue bold)[${version}](python_yellow bold)[( \($virtualenv\))]($style)'
 detect_extensions = ["py", "pyc", "pyw"]
 
 [git_branch]
@@ -69,6 +73,7 @@ format = '[$symbol$branch]($style)'
 [git_status]
 style = ""
 up_to_date = ""
+untracked = "*"
 format = '[$all_status$ahead_behind]($style)'
 
 [time]
