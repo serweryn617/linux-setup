@@ -70,6 +70,9 @@ keys = [
 
     Key([mod], 'x', lazy.spawn('alacritty -e watch -n 0.1 tail -n 30 ~/.local/share/qtile/qtile.log')),
 
+    Key([mod], 'Print', lazy.spawn('gnome-screenshot')),
+    Key([], 'Print', lazy.spawn('gnome-screenshot -i')),
+
     Key([], "XF86MonBrightnessUp", lazy.spawn("brightnessctl set +20")),
     Key([], "XF86MonBrightnessDown", lazy.spawn("brightnessctl set 20-")),
     
@@ -116,8 +119,11 @@ layouts = [
     #),
     layout.Columns(
         margin = [margin, margin, 0, 0],
-        border_focus = window_color.active_border,
         border_width = 2,
+        border_on_single = False,
+        border_normal = window_color.inactive_border,
+        border_focus = window_color.active_border,
+        
     ),
     # layout.Max(),
     # layout.Stack(num_stacks=2),
@@ -157,12 +163,14 @@ screens = [
                     active = dock_color.text,
                     inactive = dock_color.inactive_group_text,
                     background = dock_color.bg2,
-                    highlight_method='line',
-                    highlight_color=[transparent, transparent],
-                    this_current_screen_border=dock_color.active_group_highlight,
+                    highlight_method = 'line',
+                    highlight_color = [transparent, transparent],
+                    this_current_screen_border = dock_color.active_group_highlight,
                 ),
                 Powerline(color_left=dock_color.bg2, color_right=dock_color.bg1),
-                widget.CurrentLayout(background=dock_color.bg1, mouse_callbacks={'Button1': lambda: logger.warning('b1')}),
+                widget.CurrentLayout(
+                    background = dock_color.bg1,
+                ),
                 Powerline(type='close', color_left=dock_color.bg1),
 
                 widget.Spacer(),
@@ -201,13 +209,24 @@ screens = [
                     background=dock_color.bg2,
                 ),
                 Powerline(color_left=dock_color.bg2, color_right=dock_color.bg1),
-                widget.Battery(discharge_char="", format="BAT {percent:2.0%}{char}", background=dock_color.bg1),
+                widget.Battery(
+                    discharge_char = "",
+                    unknown_char = "=",
+                    format = "BAT {percent:2.0%}{char}",
+                    background = dock_color.bg1,
+                    mouse_callbacks = {
+                        "Button1": lazy.spawn(terminal + ' --working-directory /sys/class/power_supply/BAT0/')
+                    }
+                ),
                 Powerline(type='close', color_left=dock_color.bg1),
 
                 widget.Spacer(),
 
                 Powerline(type='open', color_right=dock_color.bg2),
-                widget.Clock(format="%d.%m.%Y %a %H:%M", background=dock_color.bg2),
+                widget.Clock(
+                    format="%d.%m.%Y %a %H:%M",
+                    background=dock_color.bg2
+                ),
                 Powerline(color_left=dock_color.bg2, color_right=dock_color.bg3),
                 widget.QuickExit(
                     default_text = 'Log Out',

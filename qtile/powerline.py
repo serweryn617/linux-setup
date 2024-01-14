@@ -5,9 +5,6 @@ from libqtile.command.base import expose_command
 from libqtile.widget import base
 
 
-# from libqtile.log_utils import logger
-
-
 class Powerline(base._Widget):
     defaults = [
         ("type", "mid", "Symbol type, one of open, mid, close"),
