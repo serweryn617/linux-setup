@@ -1,0 +1,17 @@
+[window]
+opacity = 0.7
+padding = { x = 6, y = 6 }
+
+[cursor]
+style = { shape = "Beam", blinking = "Always"}
+blink_timeout = 0
+thickness = 0.25
+
+[mouse]
+hide_when_typing = true
+
+[font]
+normal = { family = "CaskaydiaCoveNerdFontMono", style = "Regular" }
+bold = { family = "CaskaydiaCoveNerdFontMono", style = "Bold" }
+italic = { family = "CaskaydiaCoveNerdFontMono", style = "Italic" }
+bold_italic = { family = "CaskaydiaCoveNerdFontMono", style = "Bold Italic" }
