@@ -1,2 +1,3 @@
-# linux-setup
-My Linux Setup
+# Linux Setup
+
+![screenshot](screenshot.png)
