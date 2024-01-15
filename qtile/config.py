@@ -6,10 +6,10 @@ from libqtile.utils import guess_terminal, send_notification
 from libqtile.log_utils import logger
 
 from colors import dock_color, window_color, transparent
-from dmenu import dmenu_run, dmenu_sys
+from dmenu import dmenu_run, dmenu_sys, dmenu_exit
 from settings import *
 import hooks
-from groups import GROUPS
+from groups import GROUPS, HIDDEN_GROUPS
 from powerline import Powerline
 
 keys = [
@@ -76,15 +76,17 @@ keys = [
     Key([], "XF86MonBrightnessUp", lazy.spawn("brightnessctl set +20")),
     Key([], "XF86MonBrightnessDown", lazy.spawn("brightnessctl set 20-")),
     
+    # XF86TouchpadToggle
+
     Key([], "XF86AudioLowerVolume", lazy.spawn("amixer sset Master 5%-"), desc="Lower Volume by 5%"),
     Key([], "XF86AudioRaiseVolume", lazy.spawn("amixer sset Master 5%+"), desc="Raise Volume by 5%"),
     Key([], "XF86AudioMute", lazy.spawn("amixer sset Master 1+ toggle"), desc="Mute/Unmute Volume"),
     Key([], "XF86AudioPlay", lazy.spawn("playerctl play-pause"), desc="Play/Pause player"),
     Key([], "XF86AudioNext", lazy.spawn("playerctl next"), desc="Skip to next"),
-    Key([], "XF86AudioPrev", lazy.spawn("playerctl previous"), desc="Skip to previous"), 
+    Key([], "XF86AudioPrev", lazy.spawn("playerctl previous"), desc="Skip to previous"),
 ]
 
-groups = GROUPS
+groups = GROUPS + HIDDEN_GROUPS
 
 for n, i in enumerate(groups):
     #continue
@@ -166,6 +168,17 @@ screens = [
                     highlight_method = 'line',
                     highlight_color = [transparent, transparent],
                     this_current_screen_border = dock_color.active_group_highlight,
+                    visible_groups = [g.name for g in GROUPS],
+                ),
+                widget.GroupBox(
+                    active = dock_color.text,
+                    inactive = dock_color.inactive_group_text,
+                    background = dock_color.bg2,
+                    highlight_method = 'line',
+                    highlight_color = [transparent, transparent],
+                    this_current_screen_border = dock_color.active_group_highlight,
+                    visible_groups = [g.name for g in HIDDEN_GROUPS],
+                    hide_unused = True,
                 ),
                 Powerline(color_left=dock_color.bg2, color_right=dock_color.bg1),
                 widget.CurrentLayout(
@@ -195,7 +208,10 @@ screens = [
                 widget.Net(
                     format='UP {down:1.1f}{down_suffix} DOWN {up:1.1f}{up_suffix}',
                     prefix='M',
-                    background=dock_color.bg2
+                    background=dock_color.bg2,
+                    mouse_callbacks = {
+                        "Button1": lazy.spawn(wifi_settings)
+                    }
                 ),
                 Powerline(color_left=dock_color.bg2, color_right=dock_color.bg1),
                 widget.Volume(
@@ -222,16 +238,20 @@ screens = [
 
                 widget.Spacer(),
 
+                widget.Notify(),
+
                 Powerline(type='open', color_right=dock_color.bg2),
                 widget.Clock(
                     format="%d.%m.%Y %a %H:%M",
                     background=dock_color.bg2
                 ),
                 Powerline(color_left=dock_color.bg2, color_right=dock_color.bg3),
-                widget.QuickExit(
-                    default_text = 'Log Out',
-                    countdown_format = ' in {}s ',
+                widget.TextBox(
+                    'Shutdown',
                     background = dock_color.bg3,
+                    mouse_callbacks = {
+                        'Button1': dmenu_exit()
+                    },
                 ),
                 Powerline(type='close', color_left=dock_color.bg3),
             ],

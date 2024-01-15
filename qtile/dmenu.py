@@ -2,10 +2,9 @@ from libqtile.lazy import lazy
 from libqtile.extension import CommandSet, DmenuRun
 
 import colors
-from apps import system_apps
 from settings import *
 
-def get_dmenu_settings(command):
+def get_dmenu_settings(command, border_color = colors.green1):
     sel = colors.darker_gray 
     custom_command = (
         command + ' -c -bw 2' +
@@ -13,7 +12,7 @@ def get_dmenu_settings(command):
         ' -shf ' + colors.pink1 +
         ' -nhb ' + colors.bg_dark +
         ' -shb ' + sel +
-        ' -bc ' + colors.green1
+        ' -bc ' + border_color
     )
     theme = {
         'dmenu_command': custom_command,
@@ -38,4 +37,10 @@ def dmenu_sys():
     return lazy.run_extension(CommandSet(
         **get_dmenu_settings('dmenu'),
         commands = system_apps,
+    ))
+
+def dmenu_exit():
+    return lazy.run_extension(CommandSet(
+        **get_dmenu_settings('dmenu', colors.pink1),
+        commands = shutdown_menu,
     ))
