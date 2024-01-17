@@ -27,4 +27,8 @@ config_item_paths = (
         '~/.config/libinput-gestures.conf',
         'libinput-gestures/libinput-gestures.conf'
     ),
+    (
+        '/etc/systemd/system/battery-charge-threshold.service',
+        'systemd/battery-charge-threshold.service'
+    ),
 )
