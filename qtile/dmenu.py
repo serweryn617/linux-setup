@@ -4,6 +4,7 @@ from libqtile.extension import CommandSet, DmenuRun
 import colors
 from settings import *
 
+
 def get_dmenu_settings(command, border_color = colors.green1):
     sel = colors.darker_gray 
     custom_command = (
@@ -43,4 +44,10 @@ def dmenu_exit():
     return lazy.run_extension(CommandSet(
         **get_dmenu_settings('dmenu', colors.pink1),
         commands = shutdown_menu,
+    ))
+
+def dmenu_battery():
+    return lazy.run_extension(CommandSet(
+        **get_dmenu_settings('dmenu'),
+        commands = battery_menu,
     ))

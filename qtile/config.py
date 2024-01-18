@@ -1,3 +1,5 @@
+import subprocess
+
 from libqtile import bar, layout, widget, extension
 from libqtile.config import Click, Drag, Group, Key, Match, Screen
 from libqtile.dgroups import simple_key_binder
@@ -5,12 +7,22 @@ from libqtile.lazy import lazy
 from libqtile.utils import guess_terminal, send_notification
 from libqtile.log_utils import logger
 
-from colors import dock_color, window_color, transparent
-from dmenu import dmenu_run, dmenu_sys, dmenu_exit
-from settings import *
 import hooks
+from colors import dock_color, window_color, transparent
+from dmenu import dmenu_run, dmenu_sys, dmenu_exit, dmenu_battery
+from settings import *
 from groups import GROUPS, HIDDEN_GROUPS
 from powerline import Powerline
+
+
+@lazy.function
+def dummy_logger(qtile):
+    logger.warning('Dummy warning.')
+
+
+def log_cleaner():
+    return lazy.spawn('alacritty -e bash -c "> /home/seweryn/.local/share/qtile/qtile.log"')
+
 
 keys = [
     # A list of available commands that can be bound to keys can be found
@@ -56,9 +68,9 @@ keys = [
     ),
     Key([mod], "t", lazy.window.toggle_floating(), desc="Toggle floating on the focused window"),
     Key([mod, "control"], "r", lazy.reload_config(), desc="Reload the config"),
-    Key([mod, "control"], "q", lazy.shutdown(), desc="Shutdown Qtile"),
+    Key([mod, "control"], "q", dmenu_exit(), desc="Shutdown Qtile"),
 
-    Key([mod], "r", dmenu_run()),
+    Key([mod], "p", dmenu_run()),
     Key([mod], 'g', dmenu_sys()),
 
     Key([mod], 'e', lazy.spawn(file_explorer)),
@@ -68,7 +80,9 @@ keys = [
     Key([mod], 'equal', lazy.screen.next_group()),
     Key([mod], 'minus', lazy.screen.prev_group()),
 
-    Key([mod], 'x', lazy.spawn('alacritty -e watch -n 0.1 tail -n 30 ~/.local/share/qtile/qtile.log')),
+    Key([mod], 'x', lazy.spawn('alacritty -e watch -n 0.1 tail -n 10 ~/.local/share/qtile/qtile.log')),
+    Key([mod, 'control'], 'x', log_cleaner()),
+    Key([mod, 'shift'], 'x', dummy_logger),
 
     Key([mod], 'Print', lazy.spawn('gnome-screenshot')),
     Key([], 'Print', lazy.spawn('gnome-screenshot -i')),
@@ -113,24 +127,23 @@ for n, i in enumerate(groups):
         ]
     )
 
+layout_defaults = {
+    'margin': [margin, margin, 0, 0],
+    'border_width': 2,
+    'border_on_single': False,
+    'border_normal': window_color.inactive_border,
+    'border_focus': window_color.active_border,
+}
+
 layouts = [
-    #layout.MonadTall(
-    #    border_focus_stack = ["#d75f5f", "#8f3d3d"],
-    #    border_width = 2,
-    #    margin = [0, margin, margin, 0]
-    #),
     layout.Columns(
-        margin = [margin, margin, 0, 0],
-        border_width = 2,
-        border_on_single = False,
-        border_normal = window_color.inactive_border,
-        border_focus = window_color.active_border,
-        
+        **layout_defaults,
     ),
     # layout.Max(),
     # layout.Stack(num_stacks=2),
     # layout.Bsp(),
     # layout.Matrix(),
+    # layout.MonadTall(),
     # layout.MonadWide(),
     # layout.RatioTile(),
     # layout.Tile(),
@@ -206,7 +219,7 @@ screens = [
                 ),
                 Powerline(color_left=dock_color.bg1, color_right=dock_color.bg2),
                 widget.Net(
-                    format='UP {down:1.1f}{down_suffix} DOWN {up:1.1f}{up_suffix}',
+                    format='Up {down:1.1f}{down_suffix} Down {up:1.1f}{up_suffix}',
                     prefix='M',
                     background=dock_color.bg2,
                     mouse_callbacks = {
@@ -215,12 +228,12 @@ screens = [
                 ),
                 Powerline(color_left=dock_color.bg2, color_right=dock_color.bg1),
                 widget.Volume(
-                    fmt = 'VOL {}',
+                    fmt = 'Vol {}',
                     background=dock_color.bg1
                 ),
                 Powerline(color_left=dock_color.bg1, color_right=dock_color.bg2),
                 widget.Backlight(
-                    format = 'BNS {percent:.0%}',
+                    format = 'Bns {percent:.0%}',
                     backlight_name = 'amdgpu_bl1',
                     background=dock_color.bg2,
                 ),
@@ -228,17 +241,16 @@ screens = [
                 widget.Battery(
                     discharge_char = "",
                     unknown_char = "=",
-                    format = "BAT {percent:2.0%}{char}",
+                    format = "Bat {percent:2.0%}{char}",
+                    update_interval = 10,
                     background = dock_color.bg1,
                     mouse_callbacks = {
-                        "Button1": lazy.spawn(terminal + ' --working-directory /sys/class/power_supply/BAT0/')
+                        "Button1": dmenu_battery()
                     }
                 ),
                 Powerline(type='close', color_left=dock_color.bg1),
 
                 widget.Spacer(),
-
-                widget.Notify(),
 
                 Powerline(type='open', color_right=dock_color.bg2),
                 widget.Clock(
@@ -290,7 +302,8 @@ floating_layout = layout.Floating(
         Match(wm_class="ssh-askpass"),  # ssh-askpass
         Match(title="branchdialog"),  # gitk
         Match(title="pinentry"),  # GPG key password entry
-    ]
+    ],
+    **layout_defaults,
 )
 auto_fullscreen = True
 focus_on_window_activation = "smart"
@@ -312,4 +325,3 @@ wl_input_rules = None
 # We choose LG3D to maximize irony: it is a 3D non-reparenting WM written in
 # java that happens to be on java's whitelist.
 wmname = "LG3D"
-

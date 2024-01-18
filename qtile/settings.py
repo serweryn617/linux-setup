@@ -1,3 +1,7 @@
+from pathlib import Path
+
+config_path = Path(__file__).parent
+
 # Main modifier key, 'mod4' = Super
 mod = "mod4"
 
@@ -15,7 +19,7 @@ system_apps = {
     '󰃭 Calendar': 'gnome-calendar',
     ' Characters': 'gnome-characters',
     '󰥔 Clocks': 'gnome-clocks',
-    ' Control Center': 'gnome-control-center',
+    # ' Control Center': 'gnome-control-center',  # requires gnome-session
     '󰋊 Disks': 'gnome-disks',
     '󰉋 File Explorer': file_explorer,
     ' Fonts': 'gnome-font-viewer',
@@ -35,6 +39,22 @@ shutdown_menu = {
     'Suspend': 'systemctl suspend',
     'Reboot': 'systemctl reboot',
     'Log Out': 'qtile cmd-obj -o cmd -f shutdown',
+}
+
+def password_terminal(command):
+    return f'alacritty -t password-terminal -o window.opacity=1 -e {command}'
+
+
+def info_terminal(command):
+    return f'alacritty -t info-terminal -o window.opacity=1 -e {command}'
+
+
+# Battery menu
+battery_menu = {
+    'Set threshold to 100': password_terminal(f'{config_path}/set_battery_charge_threshold.sh 100'),
+    'Set threshold to 80':  password_terminal(f'{config_path}/set_battery_charge_threshold.sh 81'),
+    'Info':                 info_terminal(f'python3 {config_path}/battery_info.py'),
+    'Open sysfs':           'alacritty --working-directory /sys/class/power_supply/BAT0/',
 }
 
 # Appearance
