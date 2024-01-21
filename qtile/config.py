@@ -80,7 +80,7 @@ keys = [
     Key([mod], 'equal', lazy.screen.next_group()),
     Key([mod], 'minus', lazy.screen.prev_group()),
 
-    Key([mod], 'x', lazy.spawn('alacritty -e watch -n 0.1 tail -n 10 ~/.local/share/qtile/qtile.log')),
+    Key([mod], 'x', lazy.spawn('alacritty -e watch -n 0.1 tail -n 20 ~/.local/share/qtile/qtile.log')),
     Key([mod, 'control'], 'x', log_cleaner()),
     Key([mod, 'shift'], 'x', dummy_logger),
 
@@ -90,7 +90,7 @@ keys = [
     Key([], "XF86MonBrightnessUp", lazy.spawn("brightnessctl set +20")),
     Key([], "XF86MonBrightnessDown", lazy.spawn("brightnessctl set 20-")),
     
-    # XF86TouchpadToggle
+    Key([], "XF86TouchpadToggle", lazy.widget['touchpad'].toggle()),
 
     Key([], "XF86AudioLowerVolume", lazy.spawn("amixer sset Master 5%-"), desc="Lower Volume by 5%"),
     Key([], "XF86AudioRaiseVolume", lazy.spawn("amixer sset Master 5%+"), desc="Raise Volume by 5%"),
@@ -253,6 +253,10 @@ screens = [
                 widget.Spacer(),
 
                 Powerline(type='open', color_right=dock_color.bg2),
+                widget.Touchpad(
+                    background = dock_color.bg2,
+                    enabled_char = "", 
+                ),
                 widget.Clock(
                     format="%d.%m.%Y %a %H:%M",
                     background=dock_color.bg2
