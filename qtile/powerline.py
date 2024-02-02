@@ -1,3 +1,4 @@
+import cairocffi
 import math
 
 from libqtile import bar
@@ -8,13 +9,8 @@ from libqtile.widget import base
 class Powerline(base._Widget):
     defaults = [
         ("type", "mid", "Symbol type, one of open, mid, close"),
-        ("radius_delta", 0, "Add this delta to the arc radius"),
-        ("y_offset", 0, "Adjust Y position"),
-        # ("auto_color", True, "Use background colors from neighboring widgets in the middle and bar background color in opening and closing symbols"),
-        ("color_left", None, "Powerline symbol left side color"),
-        ("color_right", None, "Powerline symbol right side color"),
     ]
-    
+
     def __init__(self, length=bar.CALCULATED, **config):
         base._Widget.__init__(self, length, **config)
         self.add_defaults(Powerline.defaults)
@@ -32,21 +28,37 @@ class Powerline(base._Widget):
         return self._get_bar_size() // 2
 
     def draw(self):
-        
+        idx = self.bar.widgets.index(self)
+        max_idx = len(self.bar.widgets)
+
+        if idx > 0 and self.bar.widgets[idx - 1].background:
+            self.color_left = self.bar.widgets[idx - 1].background
+        else:
+            self.color_left = self.bar.background
+
+        if idx < max_idx - 1 and self.bar.widgets[idx + 1].background:
+            self.color_right = self.bar.widgets[idx + 1].background
+        else:
+            self.color_right = self.bar.background
+
+        self.drawer.ctx.set_operator(cairocffi.OPERATOR_SOURCE)
+        self.drawer.clear(self.color_right)
+
         if self.type == "mid":
-            self.drawer.clear(self.color_right or self.bar.background)
             self.draw_middle()
         elif self.type == "open":
-            self.drawer.clear(self.color_left or self.bar.background)
             self.draw_opening_half_circle()
         elif self.type == "close":
-            self.drawer.clear(self.color_right or self.bar.background)
             self.draw_closing_half_circle()
 
         # if self.bar.horizontal:
         self.drawer.draw(offsetx=self.offset, offsety=self.offsety, width=self.width)
         # else:
         #     self.drawer.draw(offsety=self.offset, offsetx=self.offsetx, height=self.width)
+
+    @expose_command()
+    def update(self):
+        self.draw()
 
     def draw_middle(self):
         size = self._get_bar_size()
@@ -61,33 +73,33 @@ class Powerline(base._Widget):
         self.drawer.ctx.fill()
 
     def draw_opening_half_circle(self):
-        radius = self.calculate_length()
+        size = self._get_bar_size()
+        radius = size // 2
 
         self.drawer.ctx.new_sub_path()
         self.drawer.ctx.arc(
             radius,
-            radius + self.y_offset,
-            radius + self.radius_delta,
+            radius,
+            radius,
             math.radians(90),
             math.radians(-90)
         )
-        self.drawer.set_source_rgb(self.color_right)
+        self.drawer.ctx.line_to(0, 0)
+        self.drawer.ctx.line_to(0, size)
+        self.drawer.set_source_rgb(self.color_left)
         self.drawer.ctx.fill()
 
     def draw_closing_half_circle(self):
-        radius = self.calculate_length()
+        size = self._get_bar_size()
+        radius = size // 2
 
         self.drawer.ctx.new_sub_path()
         self.drawer.ctx.arc(
             0,
-            radius + self.y_offset,
-            radius + self.radius_delta,
+            radius,
+            radius,
             math.radians(-90),
             math.radians(90)
         )
         self.drawer.set_source_rgb(self.color_left)
         self.drawer.ctx.fill()
-
-    @expose_command()
-    def update(self):
-        self.draw()

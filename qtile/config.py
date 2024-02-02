@@ -11,7 +11,7 @@ import hooks
 from colors import dock_color, window_color, transparent
 from dmenu import dmenu_run, dmenu_sys, dmenu_exit, dmenu_battery
 from settings import *
-from groups import GROUPS, HIDDEN_GROUPS
+from groups import SCRATCH_PADS, GROUPS, HIDDEN_GROUPS
 from powerline import Powerline
 
 
@@ -80,7 +80,7 @@ keys = [
     Key([mod], 'equal', lazy.screen.next_group()),
     Key([mod], 'minus', lazy.screen.prev_group()),
 
-    Key([mod], 'x', lazy.spawn('alacritty -e watch -n 0.1 tail -n 20 ~/.local/share/qtile/qtile.log')),
+    Key([mod], 'x', lazy.spawn('alacritty -e watch -n 0.1 tail -n 30 ~/.local/share/qtile/qtile.log')),
     Key([mod, 'control'], 'x', log_cleaner()),
     Key([mod, 'shift'], 'x', dummy_logger),
 
@@ -98,11 +98,13 @@ keys = [
     Key([], "XF86AudioPlay", lazy.spawn("playerctl play-pause"), desc="Play/Pause player"),
     Key([], "XF86AudioNext", lazy.spawn("playerctl next"), desc="Skip to next"),
     Key([], "XF86AudioPrev", lazy.spawn("playerctl previous"), desc="Skip to previous"),
+
+    Key([mod], 'grave', lazy.group['scratchpad'].dropdown_toggle('temp')),
 ]
 
-groups = GROUPS + HIDDEN_GROUPS
+groups = SCRATCH_PADS + GROUPS + HIDDEN_GROUPS
 
-for n, i in enumerate(groups):
+for n, i in enumerate(groups[len(SCRATCH_PADS):]):
     #continue
     keys.extend(
         [
@@ -164,7 +166,7 @@ screens = [
     Screen(
         top=bar.Bar(
             [
-                Powerline(type='open', color_right=dock_color.bg1),
+                Powerline(type='open'),
                 widget.TextBox(
                     'Menu',
                     background = dock_color.bg1,
@@ -173,7 +175,7 @@ screens = [
                         'Button1': dmenu_sys()
                     },
                 ),
-                Powerline(color_left=dock_color.bg1, color_right=dock_color.bg2),
+                Powerline(),
                 widget.GroupBox(
                     active = dock_color.text,
                     inactive = dock_color.inactive_group_text,
@@ -193,31 +195,31 @@ screens = [
                     visible_groups = [g.name for g in HIDDEN_GROUPS],
                     hide_unused = True,
                 ),
-                Powerline(color_left=dock_color.bg2, color_right=dock_color.bg1),
+                Powerline(),
                 widget.CurrentLayout(
                     background = dock_color.bg1,
                 ),
-                Powerline(type='close', color_left=dock_color.bg1),
+                Powerline(type='close'),
 
                 widget.Spacer(),
                 
-                Powerline(type='open', color_right=dock_color.bg1),
+                Powerline(type='open'),
                 widget.CPU(
                     format = 'CPU {load_percent:2.0f}%',
                     background=dock_color.bg1
                 ),
-                Powerline(color_left=dock_color.bg1, color_right=dock_color.bg2),
+                Powerline(),
                 widget.Memory(
                     format = 'MEM {MemPercent:2.0f}%',
                     background=dock_color.bg2
                 ),
-                Powerline(color_left=dock_color.bg2, color_right=dock_color.bg1),
+                Powerline(),
                 widget.DF(
                     format = 'SSD {r:.0f}%',
                     visible_on_warn=False,
                     background=dock_color.bg1
                 ),
-                Powerline(color_left=dock_color.bg1, color_right=dock_color.bg2),
+                Powerline(),
                 widget.Net(
                     format='Up {down:1.1f}{down_suffix} Down {up:1.1f}{up_suffix}',
                     prefix='M',
@@ -226,33 +228,36 @@ screens = [
                         "Button1": lazy.spawn(wifi_settings)
                     }
                 ),
-                Powerline(color_left=dock_color.bg2, color_right=dock_color.bg1),
+                Powerline(),
                 widget.Volume(
                     fmt = 'Vol {}',
                     background=dock_color.bg1
                 ),
-                Powerline(color_left=dock_color.bg1, color_right=dock_color.bg2),
+                Powerline(),
                 widget.Backlight(
                     format = 'Bns {percent:.0%}',
                     backlight_name = 'amdgpu_bl1',
                     background=dock_color.bg2,
                 ),
-                Powerline(color_left=dock_color.bg2, color_right=dock_color.bg1),
+                Powerline(),
                 widget.Battery(
                     discharge_char = "",
                     unknown_char = "=",
                     format = "Bat {percent:2.0%}{char}",
                     update_interval = 10,
                     background = dock_color.bg1,
+                    low_percentage = 0.3,
+                    low_foreground = dock_color.text,
+                    low_background = dock_color.bg3,
                     mouse_callbacks = {
                         "Button1": dmenu_battery()
                     }
                 ),
-                Powerline(type='close', color_left=dock_color.bg1),
+                Powerline(type='close'),
 
                 widget.Spacer(),
 
-                Powerline(type='open', color_right=dock_color.bg2),
+                Powerline(type='open'),
                 widget.Touchpad(
                     background = dock_color.bg2,
                     enabled_char = "", 
@@ -261,7 +266,7 @@ screens = [
                     format="%d.%m.%Y %a %H:%M",
                     background=dock_color.bg2
                 ),
-                Powerline(color_left=dock_color.bg2, color_right=dock_color.bg3),
+                Powerline(),
                 widget.TextBox(
                     'Shutdown',
                     background = dock_color.bg3,
@@ -269,7 +274,7 @@ screens = [
                         'Button1': dmenu_exit()
                     },
                 ),
-                Powerline(type='close', color_left=dock_color.bg3),
+                Powerline(type='close'),
             ],
             24,
             margin = [margin, margin, 0, margin],
