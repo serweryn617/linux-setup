@@ -6,9 +6,8 @@ $directory\
 ( $git_branch)\
 $git_status\
 ( $python)\
-$fill\
-($cmd_duration )\
-$time
+( $cmd_duration)\
+( $time)
 $character\
 ](text)
 """
@@ -60,9 +59,10 @@ style = ""
 [python]
 style = "python_green"
 symbol = "py"
+python_binary = ["python3"]
 version_format = "${major}.${minor}"
 pyenv_version_name = false
-format = '[${symbol}](blue bold)[${version}](python_yellow bold)[( \($virtualenv\))]($style)'
+format = '[(\($virtualenv\) )]($style)[${symbol}](blue bold)[${version}](python_yellow bold)'
 detect_extensions = ["py", "pyc", "pyw"]
 
 [git_branch]
