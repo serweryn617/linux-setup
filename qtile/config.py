@@ -21,7 +21,7 @@ def dummy_logger(qtile):
 
 
 def log_cleaner():
-    return lazy.spawn('alacritty -e bash -c "> /home/seweryn/.local/share/qtile/qtile.log"')
+    return lazy.spawn('bash -c "> /home/seweryn/.local/share/qtile/qtile.log"')
 
 
 keys = [
@@ -137,11 +137,15 @@ layout_defaults = {
     'border_focus': window_color.active_border,
 }
 
+layout_max_config = {
+    'margin': 0,
+    'border_width': 0,
+    'border_on_single': False,
+}
+
 layouts = [
-    layout.Columns(
-        **layout_defaults,
-    ),
-    # layout.Max(),
+    layout.Columns(**layout_defaults,),
+    layout.Max(**layout_max_config),
     # layout.Stack(num_stacks=2),
     # layout.Bsp(),
     # layout.Matrix(),
@@ -287,6 +291,20 @@ screens = [
         wallpaper_mode = 'fill',
     ),
 ]
+
+from libqtile import hook
+import os
+import subprocess
+@hook.subscribe.layout_change
+def layout_change(layout, group):
+    script = os.path.expanduser('~/.config/picom/rounded_corners.sh')
+
+    if layout.name == 'max':
+        # subprocess.run([script, 'off'])
+        screens[0].top.show(0)
+    else:
+        # subprocess.run([script, 'on'])
+        screens[0].top.show(1)
 
 # Drag floating layouts.
 mouse = [

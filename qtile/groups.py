@@ -27,5 +27,5 @@ HIDDEN_GROUPS = [
     Group('6'),
     Group('7'),
     Group('8'),
-    # Group('9'),
+    Group('9'),
 ]
