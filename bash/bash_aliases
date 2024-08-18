@@ -10,3 +10,11 @@ alias g="git"
 alias vim="nvim --clean"
 alias vimdiff="nvim --clean -d"
 alias nvimdiff="nvim -d"
+
+v() {
+  if [[ $# -eq 1 ]]; then
+    source $1/venv/bin/activate
+  else
+    source venv/bin/activate
+  fi
+}
