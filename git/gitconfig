@@ -1,17 +1,10 @@
 [alias]
-	s = status
-	ss = status -sb
-	l = log
-	ll = log --oneline
+	sstatus = status -sb
+	llog = log --oneline -8
 	last = log -1 HEAD --stat
-	b = branch
 	new = checkout -b
-	n = checkout -b
-	a = add
-	c = commit -m
-	ca = commit --amend --no-edit
-	p = push
-	d = diff
-	co = checkout
-	cl = checkout -
+	amend = commit --amend --no-edit
+	checklast = checkout -
 	unstage = reset HEAD --
+	diffstaged = diff --cached
+	remove = resotre --staged
