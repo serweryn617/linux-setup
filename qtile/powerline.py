@@ -103,3 +103,4 @@ class Powerline(base._Widget):
         )
         self.drawer.set_source_rgb(self.color_left)
         self.drawer.ctx.fill()
+

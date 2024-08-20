@@ -13,6 +13,8 @@ from dmenu import dmenu_run, dmenu_sys, dmenu_exit, dmenu_battery
 from settings import *
 from groups import SCRATCH_PADS, GROUPS, HIDDEN_GROUPS
 from powerline import Powerline
+from widgets.hideable_gap import HideableGap
+from widgets.touchpad import Touchpad
 
 
 @lazy.function
@@ -132,20 +134,29 @@ for n, i in enumerate(groups[len(SCRATCH_PADS):]):
 layout_defaults = {
     'margin': [margin, margin, 0, 0],
     'border_width': 2,
-    'border_on_single': False,
+    'border_on_single': True,
     'border_normal': window_color.inactive_border,
     'border_focus': window_color.active_border,
 }
 
 layout_max_config = {
+    'margin': [margin, margin, 0, 0],
+    'border_width': 2,
+    'border_on_single': False,
+    'border_normal': window_color.inactive_border,
+    'border_focus': window_color.active_border,
+}
+
+layout_full_config = {
     'margin': 0,
     'border_width': 0,
     'border_on_single': False,
 }
 
 layouts = [
-    layout.Columns(**layout_defaults,),
-    layout.Max(**layout_max_config),
+    layout.Columns(name='Columns', **layout_defaults,),
+    layout.Max(name='Stack', **layout_max_config),
+    layout.Max(name='Full', **layout_full_config),
     # layout.Stack(num_stacks=2),
     # layout.Bsp(),
     # layout.Matrix(),
@@ -262,7 +273,7 @@ screens = [
                 widget.Spacer(),
 
                 Powerline(type='open'),
-                widget.Touchpad(
+                Touchpad(
                     background = dock_color.bg2,
                     enabled_char = "", 
                 ),
@@ -284,8 +295,8 @@ screens = [
             margin = [margin, margin, 0, margin],
             background = transparent,
         ),
-        left = bar.Gap(margin),
-        bottom = bar.Gap(margin),
+        left = HideableGap(margin),
+        bottom = HideableGap(margin),
 
         wallpaper = '~/firewatch.jpeg',
         wallpaper_mode = 'fill',
@@ -297,14 +308,18 @@ import os
 import subprocess
 @hook.subscribe.layout_change
 def layout_change(layout, group):
-    script = os.path.expanduser('~/.config/picom/rounded_corners.sh')
+    # script = os.path.expanduser('~/.config/picom/rounded_corners.sh')
 
-    if layout.name == 'max':
+    if layout.name == 'Full':
         # subprocess.run([script, 'off'])
-        screens[0].top.show(0)
+        screens[0].top.show(False)
+        screens[0].left.show(False)
+        screens[0].bottom.show(False)
     else:
         # subprocess.run([script, 'on'])
-        screens[0].top.show(1)
+        screens[0].top.show(True)
+        screens[0].left.show(True)
+        screens[0].bottom.show(True)
 
 # Drag floating layouts.
 mouse = [

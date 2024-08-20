@@ -61,3 +61,4 @@ battery_menu = {
 margin = 12
 FONT = 'CaskaydiaCoveNerdFontMono'
 FONT_BOLD = 'CaskaydiaCoveNerdFontMono Bold'
+

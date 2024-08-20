@@ -40,3 +40,5 @@ class dock_color:
 class window_color:
     active_border = green1
     inactive_border = bg_dark
+    test_border = pink1
+
