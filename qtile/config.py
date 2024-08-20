@@ -15,11 +15,13 @@ from groups import SCRATCH_PADS, GROUPS, HIDDEN_GROUPS
 from powerline import Powerline
 from widgets.hideable_gap import HideableGap
 from widgets.touchpad import Touchpad
+from layouts.columns import MyColumns
 
 
 @lazy.function
 def dummy_logger(qtile):
-    logger.warning('Dummy warning.')
+    import random
+    logger.warning(f'Dummy warning #{random.randint(1, 100)}')
 
 
 def log_cleaner():
@@ -139,24 +141,13 @@ layout_defaults = {
     'border_focus': window_color.active_border,
 }
 
-layout_max_config = {
-    'margin': [margin, margin, 0, 0],
-    'border_width': 2,
-    'border_on_single': False,
-    'border_normal': window_color.inactive_border,
-    'border_focus': window_color.active_border,
-}
-
-layout_full_config = {
-    'margin': 0,
-    'border_width': 0,
-    'border_on_single': False,
-}
+stack_defaults = layout_defaults.copy()
+stack_defaults['border_focus'] = stack_defaults['border_normal']
 
 layouts = [
-    layout.Columns(name='Columns', **layout_defaults,),
-    layout.Max(name='Stack', **layout_max_config),
-    layout.Max(name='Full', **layout_full_config),
+    MyColumns(name='Columns', **layout_defaults),
+    layout.Max(name='Stack', **stack_defaults),
+    layout.Max(name='Full'),
     # layout.Stack(num_stacks=2),
     # layout.Bsp(),
     # layout.Matrix(),
