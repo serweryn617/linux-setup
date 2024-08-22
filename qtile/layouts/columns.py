@@ -1,10 +1,8 @@
 from libqtile.layout.columns import Columns
 
-from typing import TYPE_CHECKING
 
-if TYPE_CHECKING:
-    from libqtile.config import ScreenRect
-    from libqtile.backend.base import Window
+from libqtile.config import ScreenRect
+from libqtile.backend.base import Window
 
 
 class MyColumns(Columns):
