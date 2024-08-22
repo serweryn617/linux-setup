@@ -51,9 +51,9 @@ def info_terminal(command):
 
 # Battery menu
 battery_menu = {
-    'Set threshold to 100': password_terminal(f'{config_path}/set_battery_charge_threshold.sh 100'),
-    'Set threshold to 80':  password_terminal(f'{config_path}/set_battery_charge_threshold.sh 81'),
-    'Info':                 info_terminal(f'python3 {config_path}/battery_info.py'),
+    'Set threshold to 100': password_terminal(f'{config_path}/scripts/set_battery_charge_threshold.sh 100'),
+    'Set threshold to 80':  password_terminal(f'{config_path}/scripts/set_battery_charge_threshold.sh 81'),
+    'Info':                 info_terminal(f'python3 {config_path}/scripts/battery_info.py'),
     'Open sysfs':           'alacritty --working-directory /sys/class/power_supply/BAT0/',
 }
 

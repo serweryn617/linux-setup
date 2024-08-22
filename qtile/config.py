@@ -12,9 +12,9 @@ from colors import dock_color, window_color, transparent
 from dmenu import dmenu_run, dmenu_sys, dmenu_exit, dmenu_battery
 from settings import *
 from groups import SCRATCH_PADS, GROUPS, HIDDEN_GROUPS
-from powerline import Powerline
 from widgets.hideable_gap import HideableGap
 from widgets.touchpad import Touchpad
+from widgets.powerline import Powerline
 from layouts.columns import MyColumns
 
 
