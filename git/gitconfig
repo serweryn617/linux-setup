@@ -8,5 +8,6 @@
 	unstage = reset HEAD --
 	diffstaged = diff --cached
 	remove = resotre --staged
+	upstream = git push --set-upstream origin HEAD
 	graph = "log --graph --all --format=format:'%C(#d849ff)%h%Creset %C(#00cc52)(%ad)%Creset %s %C(#646464)- %an%Creset %C(#f54d27)%d%Creset' --date=format:'%d.%m.%Y %R'"
 
