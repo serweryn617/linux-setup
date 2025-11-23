@@ -23,6 +23,11 @@ projects['git'] = (
     f'git config --global --add include.path {base_path}/config/git/gitconfig',
 )
 
+projects['i3'] = (
+    'mkdir -p ~/.config/i3',
+    f'ln -s {base_path}/config/i3/config ~/.config/i3/config',
+)
+
 projects['libinput'] = (
     f'ln -s {base_path}/config/libinput-gestures/libinput-gestures.conf ~/.config/libinput-gestures.conf',
 )
