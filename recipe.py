@@ -37,6 +37,10 @@ projects['picom'] = (
     f'ln -s {base_path}/config/picom/picom.conf ~/.config/picom/picom.conf',
 )
 
+projects['scripts'] = (
+    f'ln -s {base_path}/config/scripts ~/.config/scripts',
+)
+
 projects['starship'] = (
     f'ln -s {base_path}/config/starship/starship.toml ~/.config/starship.toml',
 )
