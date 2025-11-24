@@ -1,12 +1,14 @@
 #!/bin/bash
 
-source ./dmenu.sh
+source ~/.config/scripts/dmenu.sh
 
 declare -A shutdown_menu=(
-    ["Power Off"]="systemctl poweroff"
-    ["Suspend"]="systemctl suspend"
-    ["Reboot"]="systemctl reboot"
-    ["Log Out"]="i3-msg exit"
+    ["Run"]=""
+    ["Explorer"]="nemo"
+    ["Browser"]="firefox"
+    ["VS Code"]="code"
+    ["Help"]=""
+    ["Power"]="i3-msg exit"
 )
 
 action=$(printf "%s\n" "${!shutdown_menu[@]}" | dmenu_custom)

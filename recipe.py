@@ -25,6 +25,7 @@ projects['git'] = (
 
 projects['i3'] = (
     'mkdir -p ~/.config/i3',
+    f'ln -s {base_path}/config/i3/bar.py ~/.config/i3/bar.py',
     f'ln -s {base_path}/config/i3/config ~/.config/i3/config',
 )
 
@@ -38,7 +39,7 @@ projects['picom'] = (
 )
 
 projects['scripts'] = (
-    f'ln -s {base_path}/config/scripts ~/.config/scripts',
+    f'ln -s {base_path}/config/scripts/ ~/.config/scripts/',
 )
 
 projects['starship'] = (
