@@ -5,11 +5,7 @@ import subprocess
 import time
 import sys
 import psutil
-import select
-import queue
 from pathlib import Path
-
-event_queue = queue.Queue()
 
 def run_terminal(command = None):
     term = ["i3-sensible-terminal", "-e", command] if command else ["i3-sensible-terminal"]
@@ -18,34 +14,21 @@ def run_terminal(command = None):
 def run_script(path):
     subprocess.Popen(path)
 
-def log(msg):
-    with open("/home/seweryn/i3_bar_log", "a") as f:
-        f.write(msg)
-        f.write("\n")
-
 def read_event():
-    if sys.stdin in select.select([sys.stdin], [], [], 0)[0]:
-        line = sys.stdin.readline().strip()
-        log(f"EVENT: {line}")
-        while line.startswith(",") or line.startswith("["):
-            line = line[1:].strip()
-        if not line:
-            # continue
-            log("DISCARDING")
-            return
-        try:
-            event = json.loads(line)
-            event_queue.put(event)
-        except Exception as e:
-            log("EXCEPTION")
-            log("STR", str(e))
-            log(type(e).__name__)
-            log("EVENT:", event)
-            log("LEN", len(event))
+    line = sys.stdin.readline().strip()
+    while line.startswith(",") or line.startswith("["):
+        line = line[1:].strip()
+    if not line:
+        return
+    try:
+        return json.loads(line)
+    except json.JSONDecodeError as e:
+        pass
 
 
 print('{ "version": 1, "click_events": true }')
 print('[')
+print('[]')
 sys.stdout.flush()
 
 while True:
@@ -72,14 +55,12 @@ while True:
         }
     ]
 
-    print(json.dumps(blocks) + ",")
+    print("," + json.dumps(blocks))
     sys.stdout.flush()
 
-    read_event()
+    event = read_event()
     
-    while not event_queue.empty():
-        log(f"PROCESSING")
-        event = event_queue.get()
+    if event:
         name = event.get("name")
 
         if name == "cpu":
