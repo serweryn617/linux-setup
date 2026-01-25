@@ -26,6 +26,8 @@ projects['git'] = (
 projects['i3'] = (
     'mkdir -p ~/.config/',
     f'ln -s {base_path}/config/i3 ~/.config/i3',
+    f'ln -s {base_path}/config/wallpapers ~/.config/wallpapers',
+    f'ln -s {base_path}/config/scripts/ ~/.config/scripts',
 )
 
 projects['libinput'] = (
@@ -35,10 +37,6 @@ projects['libinput'] = (
 projects['picom'] = (
     'mkdir -p ~/.config/picom',
     f'ln -s {base_path}/config/picom/picom.conf ~/.config/picom/picom.conf',
-)
-
-projects['scripts'] = (
-    f'ln -s {base_path}/config/scripts/ ~/.config/scripts/',
 )
 
 projects['starship'] = (
