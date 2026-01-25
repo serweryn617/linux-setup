@@ -1,0 +1,7 @@
+green1 = "#00cc52"
+pink1 = "#d849ff"
+pink2 = "#c23ee6"
+darker_gray = "#383838"
+bg_dark = "#181818"
+text = "#cccccc"
+white = "#ffffff"
