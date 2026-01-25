@@ -23,6 +23,11 @@ projects['git'] = (
     f'git config --global --add include.path {base_path}/config/git/gitconfig',
 )
 
+projects['gtk3'] = (
+    'mkdir -p ~/.config/gtk-3.0',
+    f'ln -s {base_path}/config/gtk3/settings.ini ~/.config/gtk-3.0/settings.ini',
+)
+
 projects['i3'] = (
     'mkdir -p ~/.config/',
     f'ln -s {base_path}/config/i3 ~/.config/i3',
