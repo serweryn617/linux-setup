@@ -9,6 +9,7 @@ import time
 import sys
 import psutil
 from pathlib import Path
+import select
 
 from main_menu import run_main_menu
 from power_menu import run_power_menu
@@ -20,16 +21,23 @@ def run_terminal(command = None):
 def run_script(path):
     subprocess.Popen(path)
 
+def has_line() -> bool:
+    r, _, _ = select.select([sys.stdin], [], [], 0)
+    return bool(r)
+
 def read_event():
-    line = sys.stdin.readline().strip()
-    while line.startswith(",") or line.startswith("["):
-        line = line[1:].strip()
-    if not line:
-        return
-    try:
-        return json.loads(line)
-    except json.JSONDecodeError as e:
-        pass
+    while has_line():
+        line = sys.stdin.readline().strip()
+
+        # TODO: Workaround for initial click event missing
+        if not line.startswith(','):
+            continue
+
+        line = line.lstrip(",[")
+        try:
+            return json.loads(line)
+        except json.JSONDecodeError as e:
+            pass
 
 
 print('{ "version": 1, "click_events": true }')
