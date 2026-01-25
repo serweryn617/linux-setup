@@ -10,3 +10,6 @@ def run_power_menu():
         "Log Out": ["i3-msg", "exit"],
     }
     dmenu.dmenu(options)
+
+if __name__ == "__main__":
+    run_power_menu()

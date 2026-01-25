@@ -11,9 +11,6 @@ import psutil
 from pathlib import Path
 import select
 
-from main_menu import run_main_menu
-from power_menu import run_power_menu
-
 def run_terminal(command = None):
     term = ["i3-sensible-terminal", "-e", command] if command else ["i3-sensible-terminal"]
     subprocess.Popen(term)
@@ -84,18 +81,11 @@ while True:
 
         if name == "cpu":
             run_terminal("top")
-        # if name == "time":
-        #     run_terminal()
+        if name == "time":
+            run_terminal()
         if name == "menu":
-            run_main_menu()
+            run_script(["python3", Path("~/.config/i3/main_menu.py").expanduser().resolve()])
         if name == "power":
-            run_power_menu()
-
-        if name == "res_1080p":
-            run_script(Path("~/.config/scripts/res_1080p.sh").expanduser().resolve())
-        if name == "res_2k":
-            run_script(Path("~/.config/scripts/res_2k.sh").expanduser().resolve())
-        if name == "res_4k":
-            run_script(Path("~/.config/scripts/res_4k.sh").expanduser().resolve())
+            run_script(["python3", Path("~/.config/i3/power_menu.py").expanduser().resolve()])
 
     time.sleep(0.1)
