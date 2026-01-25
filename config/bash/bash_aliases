@@ -37,3 +37,4 @@ v() {
     source venv/bin/activate
   fi
 }
+alias py="python3"
