@@ -56,12 +56,12 @@ while True:
         # {"name": "res_4k", "full_text": "  4K  "},
         {
             "name": "cpu",
-            "full_text": f" CPU: {cpu:.0f}% ",
+            "full_text": f" CPU: {cpu:3.0f}% ",
             # "color": "#a1cfff" if cpu < 2 else "#ff5555"
         },
         {
             "name": "battery",
-            "full_text": f" 🔋{battery.percent:.0f}% "  # 🔋🪫⚡
+            "full_text": f" 🔋{battery.percent:3.0f}% "  # 🔋🪫⚡
         },
         {
             "name": "time",
