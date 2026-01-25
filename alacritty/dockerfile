@@ -1,0 +1,22 @@
+FROM ubuntu:24.04
+
+RUN apt-get update && apt-get install -y \
+    git \
+    cmake \
+    g++ \
+    pkg-config \
+    libfontconfig1-dev \
+    libxcb-xfixes0-dev \
+    libxkbcommon-dev \
+    python3 \
+    curl \
+    && apt-get clean all
+
+ENV PATH=${CARGO_HOME}/bin:${PATH}
+RUN curl https://sh.rustup.rs -sSf | sh /dev/stdin -y
+RUN rustup override set stable && \
+    rustup update stable
+
+WORKDIR /workspace
+
+CMD ["/bin/bash"]

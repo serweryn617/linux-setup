@@ -10,8 +10,12 @@ thickness = 0.25
 [mouse]
 hide_when_typing = true
 
+[scrolling]
+history = 100000
+
 [font]
-normal = { family = "CaskaydiaCoveNerdFontMono", style = "Regular" }
-bold = { family = "CaskaydiaCoveNerdFontMono", style = "Bold" }
-italic = { family = "CaskaydiaCoveNerdFontMono", style = "Italic" }
-bold_italic = { family = "CaskaydiaCoveNerdFontMono", style = "Bold Italic" }
+normal = { family = "GitLab Mono", style = "Regular" }
+bold = { family = "GitLab Mono", style = "Bold" }
+italic = { family = "GitLab Mono", style = "Italic" }
+bold_italic = { family = "GitLab Mono", style = "Bold Italic" }
+size = 7

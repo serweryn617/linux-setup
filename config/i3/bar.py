@@ -12,7 +12,7 @@ from pathlib import Path
 import select
 
 def run_terminal(command = None):
-    term = ["i3-sensible-terminal", "-e", command] if command else ["i3-sensible-terminal"]
+    term = ["alacritty", "-e", command] if command else ["alacritty"]
     subprocess.Popen(term)
 
 def run_script(path):
