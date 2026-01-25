@@ -24,9 +24,8 @@ projects['git'] = (
 )
 
 projects['i3'] = (
-    'mkdir -p ~/.config/i3',
-    f'ln -s {base_path}/config/i3/bar.py ~/.config/i3/bar.py',
-    f'ln -s {base_path}/config/i3/config ~/.config/i3/config',
+    'mkdir -p ~/.config/',
+    f'ln -s {base_path}/config/i3 ~/.config/i3',
 )
 
 projects['libinput'] = (
