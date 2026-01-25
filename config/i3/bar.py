@@ -45,8 +45,12 @@ print('[')
 print('[]')
 sys.stdout.flush()
 
+cpu_loads = [0 for _ in range(10)]
+
 while True:
-    cpu = psutil.cpu_percent()
+    cpu_loads.pop(0)
+    cpu_loads.append(psutil.cpu_percent())
+    cpu = sum(cpu_loads) / 10
     battery = psutil.sensors_battery()
 
     blocks = [
