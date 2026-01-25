@@ -11,7 +11,7 @@ def run_main_menu():
         "VS Code": "code",
         "Resolution": ["python3", Path("~/.config/i3/resolution_menu.py").expanduser().resolve()],
         "Help": "",
-        "Power": "",
+        "Power": ["python3", Path("~/.config/i3/power_menu.py").expanduser().resolve()],
     }
     dmenu.dmenu(options)
 
