@@ -18,6 +18,34 @@ def run_terminal(command = None):
 def run_script(path):
     subprocess.Popen(path)
 
+def cpu_indicator():
+    cpu_loads.pop(0)
+    cpu_loads.append(psutil.cpu_percent())
+    cpu = sum(cpu_loads) / 10
+    return f" CPU: {cpu:3.0f}% "
+
+def time_left(seconds):
+    mm, ss = divmod(seconds, 60)
+    hh, mm = divmod(mm, 60)
+    return f"{hh:d}:{mm:02d}"
+
+def battery_indicator():
+    battery = psutil.sensors_battery()
+    charging = '⚡' if battery.power_plugged else ' '
+    symbol = "🔋" if battery.percent >= 30 else "🪫"
+    left = time_left(battery.secsleft)
+    # 🔋🪫⚡
+    return f" {charging}{symbol}{battery.percent:3.0f}% ({left}) "
+
+def memory_indicator():
+    memory = psutil.virtual_memory()
+    percent = memory.percent
+
+    total = memory.total // (1000**3 // 10) / 10
+    used = (memory.total - memory.available) // (1000**3 // 10) / 10
+
+    return f" MEM: {percent}% ({used:4.1f}/{total:4.1f}GB) "
+
 def has_line() -> bool:
     r, _, _ = select.select([sys.stdin], [], [], 0)
     return bool(r)
@@ -45,24 +73,19 @@ sys.stdout.flush()
 cpu_loads = [0 for _ in range(10)]
 
 while True:
-    cpu_loads.pop(0)
-    cpu_loads.append(psutil.cpu_percent())
-    cpu = sum(cpu_loads) / 10
-    battery = psutil.sensors_battery()
-
     blocks = [
         {"name": "menu", "full_text": " Menu "},
-        # {"name": "res_1080p", "full_text": " 1080p "},
-        # {"name": "res_2k", "full_text": "  2K  "},
-        # {"name": "res_4k", "full_text": "  4K  "},
         {
             "name": "cpu",
-            "full_text": f" CPU: {cpu:3.0f}% ",
-            # "color": "#a1cfff" if cpu < 2 else "#ff5555"
+            "full_text": cpu_indicator(),
+        },
+        {
+            "name": "mem",
+            "full_text": memory_indicator(),
         },
         {
             "name": "battery",
-            "full_text": f" 🔋{battery.percent:3.0f}% "  # 🔋🪫⚡
+            "full_text": battery_indicator(),
         },
         {
             "name": "time",
