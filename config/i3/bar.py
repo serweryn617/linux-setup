@@ -22,29 +22,37 @@ def cpu_indicator():
     cpu_loads.pop(0)
     cpu_loads.append(psutil.cpu_percent())
     cpu = sum(cpu_loads) / 10
-    return f" CPU: {cpu:3.0f}% "
+    return f" 🧮 CPU: {cpu:3.0f}% "
 
 def time_left(seconds):
     mm, ss = divmod(seconds, 60)
     hh, mm = divmod(mm, 60)
-    return f"{hh:d}:{mm:02d}"
+    return f"{hh:2d}:{mm:02d}"
 
 def battery_indicator():
     battery = psutil.sensors_battery()
-    charging = '⚡' if battery.power_plugged else ' '
     symbol = "🔋" if battery.percent >= 30 else "🪫"
+    symbol = "⚡" if battery.power_plugged else symbol
     left = time_left(battery.secsleft)
     # 🔋🪫⚡
-    return f" {charging}{symbol}{battery.percent:3.0f}% ({left}) "
+    return f" {symbol}{battery.percent:3.0f}% (⏳{left}) "
 
 def memory_indicator():
     memory = psutil.virtual_memory()
-    percent = memory.percent
 
-    total = memory.total // (1000**3 // 10) / 10
-    used = (memory.total - memory.available) // (1000**3 // 10) / 10
+    def gb(x):
+        return (x // (1000**3 // 10)) / 10
 
-    return f" MEM: {percent}% ({used:4.1f}/{total:4.1f}GB) "
+    total = gb(memory.total)
+    used = gb(memory.total - memory.available)
+
+    total = f"{total:.1f}"
+    used = f"{used:.1f}"
+
+    space = len(total)
+    pad = space - len(used)
+
+    return f" 💾 MEM: {memory.percent:3.0f}% {' ' * pad}({used}/{total}GB) "
 
 def has_line() -> bool:
     r, _, _ = select.select([sys.stdin], [], [], 0)
@@ -74,7 +82,7 @@ cpu_loads = [0 for _ in range(10)]
 
 while True:
     blocks = [
-        {"name": "menu", "full_text": " Menu "},
+        {"name": "menu", "full_text": " 📑 Menu "},
         {
             "name": "cpu",
             "full_text": cpu_indicator(),
@@ -89,9 +97,9 @@ while True:
         },
         {
             "name": "time",
-            "full_text": time.strftime(" %H:%M:%S %d.%m.%Y ")
+            "full_text": time.strftime(" 🕒 %H:%M:%S 📅 %d.%m.%Y ")
         },
-        {"name": "power", "full_text": " Power "},
+        {"name": "power", "full_text": " 💥 Power "},
     ]
 
     print("," + json.dumps(blocks))
