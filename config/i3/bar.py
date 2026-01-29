@@ -29,13 +29,25 @@ def time_left(seconds):
     hh, mm = divmod(mm, 60)
     return f"{hh:2d}:{mm:02d}"
 
+battery_time_left = [0 for _ in range(600)]
+
 def battery_indicator():
     battery = psutil.sensors_battery()
     symbol = "🔋" if battery.percent >= 30 else "🪫"
     symbol = "⚡" if battery.power_plugged else symbol
-    left = time_left(battery.secsleft)
-    # 🔋🪫⚡
-    return f" {symbol}{battery.percent:3.0f}% (⏳{left}) "
+    
+    battery_time_left.pop(0)
+    battery_time_left.append(battery.secsleft)
+
+    arr = [b for b in battery_time_left if b > 0]
+
+    left = sum(arr) // len(arr)
+    if left >= 0:
+        letf_indicator = f"⏳{time_left(left)}"
+    else:
+        letf_indicator = ""
+    
+    return f" {symbol}{battery.percent:3.0f}% {letf_indicator} "
 
 def memory_indicator():
     memory = psutil.virtual_memory()
@@ -52,7 +64,7 @@ def memory_indicator():
     space = len(total)
     pad = space - len(used)
 
-    return f" 💾 MEM: {memory.percent:3.0f}% {' ' * pad}({used}/{total}GB) "
+    return f" 💾 Mem.: {memory.percent:3.0f}% {' ' * pad}({used}/{total}GB) "
 
 def has_line() -> bool:
     r, _, _ = select.select([sys.stdin], [], [], 0)
