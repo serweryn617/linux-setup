@@ -18,4 +18,4 @@ normal = { family = "GitLab Mono", style = "Regular" }
 bold = { family = "GitLab Mono", style = "Bold" }
 italic = { family = "GitLab Mono", style = "Italic" }
 bold_italic = { family = "GitLab Mono", style = "Bold Italic" }
-size = 7
+size = 12
