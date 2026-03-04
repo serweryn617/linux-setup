@@ -41,8 +41,9 @@ def battery_indicator():
 
     arr = [b for b in battery_time_left if b > 0]
 
-    left = sum(arr) // len(arr)
-    if left >= 0:
+    left = sum(arr)
+    if left >= 0 and len(arr) > 0:
+        left //= len(arr)
         letf_indicator = f"⏳{time_left(left)}"
     else:
         letf_indicator = ""
