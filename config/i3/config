@@ -220,4 +220,4 @@ bar {
 exec_always --no-startup-id feh --randomize --bg-fill ~/.config/wallpapers/*
 
 # Set DPI based on resolution
-exec_always --no-startup-id ~/.config/i3/set_dpi.sh
+exec_always --no-startup-id ~/.config/scripts/set_dpi.sh
