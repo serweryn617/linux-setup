@@ -217,4 +217,7 @@ bar {
 # gaps outer -5px
 
 # Set background wallpaper
-exec --no-startup-id feh --randomize --bg-fill ~/.config/wallpapers/*
+exec_always --no-startup-id feh --randomize --bg-fill ~/.config/wallpapers/*
+
+# Set DPI based on resolution
+exec_always --no-startup-id ~/.config/i3/set_dpi.sh
