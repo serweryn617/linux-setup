@@ -12,6 +12,7 @@ RUN apt-get update && apt-get install -y \
     curl \
     && apt-get clean all
 
+# ENV PATH=/root/.cargo/bin:$PATH
 ENV PATH=${CARGO_HOME}/bin:${PATH}
 RUN curl https://sh.rustup.rs -sSf | sh /dev/stdin -y
 RUN rustup override set stable && \
