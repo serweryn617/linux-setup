@@ -5,7 +5,6 @@ alias ll="ls -lhA --time-style='+%d.%m.%Y %R'"
 
 alias f="find . -name"
 
-alias g="git"
 alias gs="git status -sb"
 alias gst="git status"
 alias gd="git diff"
@@ -46,3 +45,5 @@ v() {
   fi
 }
 alias py="python3"
+
+alias c="cook"

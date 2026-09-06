@@ -5,3 +5,7 @@ fi
 if [ -f ~/.config/alacritty/alacritty.bash ]; then
   . ~/.config/alacritty/alacritty.bash
 fi
+
+if [ -d "$HOME/Projects" ]; then
+    cd "$HOME/Projects"
+fi
